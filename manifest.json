@@ -1,0 +1,29 @@
+{
+  "name": "DnD Dice Roller",
+  "description": "Calculates the hit and damage of any spell or attack action",
+  "version": "1",
+  "manifest_version": 2,
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.dndbeyond.com/profile/*/characters/*",
+        "http://*.dndbeyond.com/profile/*/characters/*"
+      ],
+      "js": [
+        "scripts/jquery.min.js",
+        "scripts/entities/spell.js",
+        "scripts/entities/Attack.js",
+        "scripts/factories/SpellFactory.js",
+        "scripts/factories/ClickEventFactory.js",
+        "scripts/helpers/roll.js",
+        "scripts/Index.js"
+      ],
+      "css": [
+        "css/index.css"
+      ]
+    }
+  ]
+}
