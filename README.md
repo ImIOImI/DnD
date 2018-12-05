@@ -1,4 +1,5 @@
 ##DnD Roller Chrome Extension
+
 This extension runs on DnD Beyond and puts a listener on the spell casting buttons. When you
  cast a spell, it pops a modal that calculates the hit to attack/save (it rolls attack rolls 
  twice just in case you need to attack with advantage or disadvantage) and the damage of the
@@ -6,6 +7,7 @@ This extension runs on DnD Beyond and puts a listener on the spell casting butto
  rolls and the damage for each ray. 
  
 ###Install
+
 Because this package isn't available in chrome's extension market place, yet, you will need 
 to follow the following steps to install it:
 1) Download the package
@@ -15,9 +17,11 @@ to follow the following steps to install it:
 5) In the file browser, navigate to your directory and click Open
 
 ###Contributing
+
 Feel free to send me pull requests!
 
 ###Further Dev
+
 I'm looking to:
 * Create buttons on attack actions that calculate attacks the same way spells are calculated
 * Style the modal to display advantage and disadvantage rolls optionally
@@ -25,4 +29,5 @@ I'm looking to:
 * Add compatibility with slack so roll data can appear in a chat
 
 ###Donations
+
 If you want to [buy me a cup of coffee](https://paypal.me/JTroyKnapp/), I'd appreciate it! I respond, positively, to bribery. 
