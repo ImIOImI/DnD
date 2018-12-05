@@ -2,18 +2,18 @@ var SpellFactory = {
     resolveSpell: function () {
         var name = Spell.name.replace(/\s/g, '');
 
-        if (typeof this[name] == 'undefined') {
+        if (typeof SpellFactory[name] == 'undefined') {
             return this.default(Spell);
         }
 
-        return this[name](Spell);
+        return SpellFactory[name](Spell);
     },
 
     default: function () {
         this.attack(0);
     },
 
-    MagicMissle: function () {
+    MagicMissile: function () {
         var attacks = 3 + this.getAdditionalAttacks();
         this.multiAttack(attacks);
     },
