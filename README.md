@@ -1,4 +1,4 @@
-##DnD Roller Chrome Extension
+## DnD Roller Chrome Extension
 
 This extension runs on DnD Beyond and puts a listener on the spell casting buttons. When you
  cast a spell, it pops a modal that calculates the hit to attack/save (it rolls attack rolls 
@@ -6,7 +6,7 @@ This extension runs on DnD Beyond and puts a listener on the spell casting butto
  attack. It's compatible with multiattack spells like scourching ray, and displays the attack 
  rolls and the damage for each ray. 
  
-###Install
+### Install
 
 Because this package isn't available in chrome's extension market place, yet, you will need 
 to follow the following steps to install it:
@@ -16,11 +16,11 @@ to follow the following steps to install it:
 4) Click on "Load unpacked extension"
 5) In the file browser, navigate to your directory and click Open
 
-###Contributing
+### Contributing
 
 Feel free to send me pull requests!
 
-###Further Dev
+### Further Dev
 
 I'm looking to:
 * Create buttons on attack actions that calculate attacks the same way spells are calculated
@@ -28,6 +28,6 @@ I'm looking to:
 * Make the modal respond to your character class and present options for quickening/twining/overcharging, etc.
 * Add compatibility with slack so roll data can appear in a chat
 
-###Donations
+### Donations
 
 If you want to [buy me a cup of coffee](https://paypal.me/JTroyKnapp/), I'd appreciate it! I respond, positively, to bribery. 
