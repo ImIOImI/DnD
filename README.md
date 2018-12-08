@@ -6,6 +6,18 @@ This extension runs on DnD Beyond and puts a listener on the spell casting butto
  attack. It's compatible with multiattack spells like scourching ray, and displays the attack 
  rolls and the damage for each ray. 
  
+## Single Attacks
+
+![Single Attack](https://raw.githubusercontent.com/ImIOImI/DnD/assets/assets/dex_save.PNG "Single Attack")
+
+## Multi Attacks
+
+![Multi Attack](https://raw.githubusercontent.com/ImIOImI/DnD/assets/assets/multi_attack.PNG "Multi Attack")
+
+## Attacks With Saves
+
+![Save Attack](https://raw.githubusercontent.com/ImIOImI/DnD/assets/assets/single_hit.PNG "Save Attack")
+ 
 ### Install
 
 Because this package isn't available in chrome's extension market place, yet, you will need 
