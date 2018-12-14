@@ -6,6 +6,12 @@
   "permissions": [
     "activeTab"
   ],
+  "icons": {
+    "16": "images/D20_16x16.png",
+    "32": "images/D20_32x32.png",
+    "48": "images/D20_48x48.png",
+    "128": "images/D20_128x128.png"
+  },
   "content_scripts": [
     {
       "matches": [
