@@ -36,7 +36,7 @@ ModalFactory = {
         mf.modalBackground.appendChild(mf.modal);
 
         mf.titleDiv = document.createElement('div');
-        mf.titleDiv.classList.add('roller-title', 'roller-wipe-content');
+        mf.titleDiv.classList.add('roller-title');
 
         mf.close = document.createElement('span');
         mf.close.classList.add('roller-close');
@@ -75,16 +75,15 @@ ModalFactory = {
             SpellFactory.resolveSpell(Spell);
 
             mf.setSpellName(Spell.name);
+            mf.setAttackTypeFromAttack(Spell.attacks[0]);
             switch(true) {
                 // case (Spell.name === 'Animate Objects'):
                 //     break;
-                case (typeof Spell.attacks[0].save === 'string'):
-                    mf.attackType = 'save';
+                case (mf.attackType === 'save'):
                     var saveHead = mf.makeHeader('Save');
                     mf.tblBody.append(saveHead);
                     break;
-                case (typeof Spell.attacks[0].roll1 === 'string'):
-                    mf.attackType = 'hit';
+                case (mf.attackType === 'hit'):
                     var roll1Head = mf.makeHeader('First Roll');
                     var roll2Head = mf.makeHeader('Second Roll');
                     mf.tblBody.append(roll1Head);
@@ -118,7 +117,7 @@ ModalFactory = {
             case (typeof attack.save === 'string'):
                 mf.attackType = 'save';
                 break;
-            case (typeof Spell.attacks[0].roll1 === 'string'):
+            case (typeof attack.roll1 === 'number'):
                 mf.attackType = 'hit';
                 break;
             default:
@@ -149,17 +148,6 @@ ModalFactory = {
                 mf.tblBody.append(roll2Head);
                 break;
         }
-
-        //build the name of the attack
-
-        //decide the type of attack
-
-        //append table to modal content (so it can be compatible with multiple attacks)
-
-    },
-
-    attackHeader : function () {
-
     },
 
 
@@ -176,10 +164,10 @@ ModalFactory = {
                     break;
                 case 'hit':
                     var hit1Total = attack.roll1 + attack.hitModifier;
-                    var hit2Total = attack.roll1 + attack.hitModifier;
+                    var hit2Total = attack.roll2 + attack.hitModifier;
 
-                    var hitText1 = attack.roll1 + ' + ' + attack.hitModifier + ' = ' + hit1Total;
-                    var hitText2 = attack.roll1 + ' + ' + attack.hitModifier + ' = ' + hit2Total;
+                    var hitText1 = '(' + attack.roll1 + ') + ' + attack.hitModifier + ' = ' + hit1Total;
+                    var hitText2 = '(' + attack.roll2 + ') + ' + attack.hitModifier + ' = ' + hit2Total;
 
                     var roll1Cell = mf.getCell(hitText1);
                     var roll2Cell = mf.getCell(hitText2);
@@ -191,13 +179,15 @@ ModalFactory = {
                 //don't do anything for auto hits
             }
 
-            var damageText = attack.damage;
+            var damageText = '';
             if((attack.damageRolls.length > 1) || (attack.damageModifier > 0)){
-                damageText += ' = (' + attack.damageRolls.join(' + ') + ')';
+                damageText += '(' + attack.damageRolls.join(' + ') + ')';
                 if(attack.damageModifier > 0){
                     damageText += ' + ' + attack.damageModifier;
                 }
+                damageText += ' = ';
             }
+            damageText += attack.damage;
 
             var damageCell = mf.getCell(damageText);
             row.append(damageCell);

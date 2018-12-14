@@ -91,6 +91,9 @@ var SpellFactory = {
             case (Spell.save != null):
                 var save = Spell.save;
                 break;
+            case (Spell.modifier === '--'):
+                //auto hit spell
+                break;
             case (Spell.modifier != null):
                 rolls[0] = Roll.d20();
                 rolls[1] = Roll.d20();
