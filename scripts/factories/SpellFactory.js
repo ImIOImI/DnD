@@ -11,16 +11,61 @@ var SpellFactory = {
 
     default: function () {
         this.attack(0);
+        SpellFactory.setModal(Spell.attacks, false);
     },
 
     MagicMissile: function () {
         var attacks = 3 + this.getAdditionalAttacks();
         this.multiAttack(attacks);
+        SpellFactory.setModal(Spell.attacks, false);
+    },
+
+    CloudOfDaggers: function () {
+        this.attack(0);
+        SpellFactory.setModal(Spell.attacks, false);
     },
 
     ScorchingRay: function () {
         var attacks = 3 + this.getAdditionalAttacks();
         this.multiAttack(attacks);
+        SpellFactory.setModal(Spell.attacks, false);
+    },
+
+    AnimateObjects: function () {
+        var allAttacks = [];
+        Spell.modifier = 8;
+        Spell.dice = '1d4+4';
+        this.multiAttack(10);
+        allAttacks['tiny'] = Spell.attacks;
+        // Spell.attacks = [];
+        //
+        // Spell.modifier = 6;
+        // Spell.dice = '1d8+2';
+        // this.multiAttack(10);
+        // allAttacks['small'] = Spell.attacks;
+        // Spell.attacks = [];
+        //
+        // Spell.modifier = 5;
+        // Spell.dice = '2d6+1';
+        // this.multiAttack(5);
+        // allAttacks['medium'] = Spell.attacks;
+        // Spell.attacks = [];
+        //
+        // Spell.modifier = 6;
+        // Spell.dice = '2d10+2';
+        // this.multiAttack(2);
+        // allAttacks['large'] = Spell.attacks;
+        // Spell.attacks = [];
+        //
+        // Spell.modifier = 8;
+        // Spell.dice = '2d12+4';
+        // this.multiAttack(1);
+        // allAttacks['huge'] = Spell.attacks;
+        // Spell.attacks = allAttacks;
+    },
+
+    setModal : function(attacks, title) {
+        ModalFactory.setAttacks(attacks);
     },
 
     getAdditionalAttacks: function () {
@@ -36,35 +81,41 @@ var SpellFactory = {
     attack: function (i) {
         var rolls = [];
         var hitModifier = 0;
+        var damageRolls = [];
+        var rows = [];
 
         if (i == null) {
             i = 0;
         }
-
-        if (Spell.save == null) {
-            rolls[0] = Roll.d20();
-            rolls[1] = Roll.d20();
-            hitModifier = Spell.modifier;
-        }
-        else {
-            var save = Spell.save;
+        switch(true) {
+            case (Spell.save != null):
+                var save = Spell.save;
+                break;
+            case (Spell.modifier != null):
+                rolls[0] = Roll.d20();
+                rolls[1] = Roll.d20();
+                hitModifier = Spell.modifier;
+                break;
+            default:
+                //don't do anything
         }
 
         var a = this.convertDice(Spell);
-        // console.log('dice array: ');
-        // console.log(a);
-        var diceDamage = Roll.roll(a.sides, a.dice);
-        // console.log('Dice damage: ' + diceDamage);
-
-        var plus = 0;
-        if(typeof a.plus !== 'undefined') {
-            plus = parseInt(a.plus);
+        var x = 0;
+        var diceDamage = 0;
+        for (; x < a.dice; x++) {
+            var roll = Roll.roll(a.sides);
+            damageRolls[x] = roll;
+            diceDamage += roll;
         }
 
-        var damage = Roll.roll(a.sides, a.dice) + plus;
-        // console.log('Damage: ' + damage);
+        var plus = 0;
+        if(a.plus > 0) {
+            plus = a.plus;
+        }
 
-        Spell.attacks[i] = new Attack(rolls, hitModifier, damage, Spell.save);
+        var damage = diceDamage + plus;
+        Spell.attacks[i] = new Attack(rolls, hitModifier, damage, damageRolls, plus, Spell.save);
         return Spell;
     },
 
@@ -72,7 +123,6 @@ var SpellFactory = {
         var a = parseInt(attacks);
         var i = 0;
         for (; i < a; i++) {
-            //console.log('attack #: ' + i + ' max attacks: ' + a);
             this.attack(i);
         }
     },
@@ -87,7 +137,7 @@ var SpellFactory = {
         return {
             dice: a[0],
             sides: b[0],
-            plus: b[1]
+            plus: parseInt(b[1])
         }
     }
 }

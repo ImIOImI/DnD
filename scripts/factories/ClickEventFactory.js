@@ -8,25 +8,14 @@ clickEventFactory = {
     build: function (event, doc) {
         this.event = event;
         this.target = event.target;
-
-        //console.log('target: ');
-        //console.log(this.target);
-
         row = this.findRow(doc);
-        //console.log('row: ');
-        //console.log(row);
-
         spell = this.buildSpell(row);
-        // console.log(spell);
-        // console.log(Spell);
 
         return spell;
     },
 
     findRow: function (doc) {
         //we need to figure out if we just clicked on the span or the button
-        // console.log('this: ');
-        // console.log(this);
         tagName = this.event.target.tagName;
         return $(this.event.target).closest(".ct-spells-spell");
     },
@@ -41,9 +30,6 @@ clickEventFactory = {
         self = this;
         row.find('div').each(function () {
             text = null;
-            // console.log('Classname: ');
-            // console.log(this.className);
-            // console.log(this.innerText);
             switch (this.className.trim()) {
                 case 'ct-spells-spell__label':
                 case 'ct-spells-spell__label ct-spells-spell__label--scaled':
@@ -72,11 +58,8 @@ clickEventFactory = {
     regTest: function (re, str) {
         var regex = RegExp(re);
         if (regex.test(str)) {
-            //console.log('found a match');
             return true;
         }
-
-        //console.log('no match');
         return false;
     }
 };
