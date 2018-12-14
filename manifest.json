@@ -16,6 +16,7 @@
         "scripts/jquery.min.js",
         "scripts/entities/spell.js",
         "scripts/entities/Attack.js",
+        "scripts/factories/ModalFactory.js",
         "scripts/factories/SpellFactory.js",
         "scripts/factories/ClickEventFactory.js",
         "scripts/helpers/roll.js",
