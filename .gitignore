@@ -1,4 +1,4 @@
 .idea/*
 *.min.js
 !/scripts/jquery.min.js
-/css/index.min.css
+*.min.css
