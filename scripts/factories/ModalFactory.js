@@ -75,12 +75,9 @@ ModalFactory = {
             SpellFactory.resolveSpell(Spell);
 
             mf.setSpellName(Spell.name);
-            console.log(Spell);
-
             switch(true) {
-                case (Spell.name === 'Animate Objects'):
-                    console.log('animate attack');
-                    break;
+                // case (Spell.name === 'Animate Objects'):
+                //     break;
                 case (typeof Spell.attacks[0].save === 'string'):
                     mf.attackType = 'save';
                     var saveHead = mf.makeHeader('Save');
@@ -98,7 +95,6 @@ ModalFactory = {
             }
 
             var damageHead = mf.makeHeader('Damage' + ' (' + Spell.dice + ')');
-            // console.log(roll1Head);
 
 
             mf.tblBody.append(damageHead);
@@ -196,8 +192,6 @@ ModalFactory = {
             }
 
             var damageText = attack.damage;
-            console.log("Attack: ");
-            console.log(attack);
             if((attack.damageRolls.length > 1) || (attack.damageModifier > 0)){
                 damageText += ' = (' + attack.damageRolls.join(' + ') + ')';
                 if(attack.damageModifier > 0){
@@ -238,13 +232,5 @@ ModalFactory = {
 
     setAttacks : function (attacks) {
         ModalFactory.attacks = attacks;
-        console.log('Modal factory attacks: ');
-        console.log(ModalFactory.attacks);
-        console.log(attacks);
     }
-}
-
-var Modal = {
-    rows : null,
-    html : null,
 }

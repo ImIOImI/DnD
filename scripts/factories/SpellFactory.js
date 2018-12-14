@@ -37,33 +37,31 @@ var SpellFactory = {
         Spell.dice = '1d4+4';
         this.multiAttack(10);
         allAttacks['tiny'] = Spell.attacks;
-        Spell.attacks = [];
-
-        Spell.modifier = 6;
-        Spell.dice = '1d8+2';
-        this.multiAttack(10);
-        allAttacks['small'] = Spell.attacks;
-        Spell.attacks = [];
-
-        Spell.modifier = 5;
-        Spell.dice = '2d6+1';
-        this.multiAttack(5);
-        allAttacks['medium'] = Spell.attacks;
-        Spell.attacks = [];
-
-        Spell.modifier = 6;
-        Spell.dice = '2d10+2';
-        this.multiAttack(2);
-        allAttacks['large'] = Spell.attacks;
-        Spell.attacks = [];
-
-        Spell.modifier = 8;
-        Spell.dice = '2d12+4';
-        this.multiAttack(1);
-        allAttacks['huge'] = Spell.attacks;
-        Spell.attacks = allAttacks;
-
-        console.log(allAttacks);
+        // Spell.attacks = [];
+        //
+        // Spell.modifier = 6;
+        // Spell.dice = '1d8+2';
+        // this.multiAttack(10);
+        // allAttacks['small'] = Spell.attacks;
+        // Spell.attacks = [];
+        //
+        // Spell.modifier = 5;
+        // Spell.dice = '2d6+1';
+        // this.multiAttack(5);
+        // allAttacks['medium'] = Spell.attacks;
+        // Spell.attacks = [];
+        //
+        // Spell.modifier = 6;
+        // Spell.dice = '2d10+2';
+        // this.multiAttack(2);
+        // allAttacks['large'] = Spell.attacks;
+        // Spell.attacks = [];
+        //
+        // Spell.modifier = 8;
+        // Spell.dice = '2d12+4';
+        // this.multiAttack(1);
+        // allAttacks['huge'] = Spell.attacks;
+        // Spell.attacks = allAttacks;
     },
 
     setModal : function(attacks, title) {
@@ -89,9 +87,6 @@ var SpellFactory = {
         if (i == null) {
             i = 0;
         }
-        // console.log('Spell save: ' + Spell.save);
-        // console.log(Spell);
-
         switch(true) {
             case (Spell.save != null):
                 var save = Spell.save;
@@ -115,29 +110,19 @@ var SpellFactory = {
         }
 
         var plus = 0;
-        //console.log('plus: ' + a.plus + ' typeof: ' + typeof a.plus);
         if(a.plus > 0) {
             plus = a.plus;
         }
 
         var damage = diceDamage + plus;
-        //console.log('damage: ' + diceDamage + ' + ' + plus + ' = ' + damage);
-
-        // console.log('Damage: ' + damage);
-
         Spell.attacks[i] = new Attack(rolls, hitModifier, damage, damageRolls, plus, Spell.save);
         return Spell;
-    },
-
-    autoHit: function (i){
-
     },
 
     multiAttack: function (attacks) {
         var a = parseInt(attacks);
         var i = 0;
         for (; i < a; i++) {
-            //console.log('attack #: ' + i + ' max attacks: ' + a);
             this.attack(i);
         }
     },
@@ -149,10 +134,6 @@ var SpellFactory = {
     convertDice: function (Spell) {
         var a = Spell.dice.split('d');
         var b = a[1].split('+');
-        // console.log('dice split: ');
-        // console.log(Spell.dice);
-        // console.log(a);
-        // console.log(b);
         return {
             dice: a[0],
             sides: b[0],
