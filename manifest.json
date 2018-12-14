@@ -21,10 +21,10 @@
       "js": [
         "scripts/jquery.min.js",
         "scripts/entities/Attack.js",
-        "scripts/factories/ModalFactory.min.js",
-        "scripts/factories/SpellFactory.min.js",
-        "scripts/factories/ClickEventFactory.min.js",
-        "scripts/helpers/roll.min.js",
+        "scripts/factories/ModalFactory.js",
+        "scripts/factories/SpellFactory.js",
+        "scripts/factories/ClickEventFactory.js",
+        "scripts/helpers/roll.js",
         "scripts/Index.js"
       ],
       "css": [
