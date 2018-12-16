@@ -72,6 +72,10 @@ ModalFactory = {
         //need to set a listener for when the Spell class div appears <div class="ct-spells">
         $('body').on( "click", "[class$='spell__action']", function(event) {
             clickEventFactory.build(event, $('body'));
+
+            if((!SpellFactory.isSpell(Spell.name))&&(!Number.isInteger(parseInt(Spell.dice)))){
+                return false;
+            }
             SpellFactory.resolveSpell(Spell);
 
             mf.setSpellName(Spell.name);
