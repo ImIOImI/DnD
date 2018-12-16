@@ -71,6 +71,8 @@ ModalFactory = {
         var mf = ModalFactory;
         //need to set a listener for when the Spell class div appears <div class="ct-spells">
         $('body').on( "click", "[class$='spell__action']", function(event) {
+            console.log('executing action');
+            console.trace();
             clickEventFactory.build(event, $('body'));
             SpellFactory.resolveSpell(Spell);
 
@@ -131,6 +133,7 @@ ModalFactory = {
     },
 
     buildTableFromAttacks : function (attacks, attackName) {
+        console.log('testing123');
         var roll1Head = mf.makeHeader('First Roll');
         var roll2Head = mf.makeHeader('Second Roll');
         mf.tblBody.append(roll1Head);
