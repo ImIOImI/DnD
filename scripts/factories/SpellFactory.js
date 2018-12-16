@@ -2,7 +2,7 @@ var SpellFactory = {
     resolveSpell: function () {
         var name = Spell.name.replace(/\s/g, '');
 
-        if (typeof SpellFactory[name] == 'undefined') {
+        if (!SpellFactory.isSpell(name)) {
             return this.default(Spell);
         }
 
@@ -142,5 +142,12 @@ var SpellFactory = {
             sides: b[0],
             plus: parseInt(b[1])
         }
-    }
+    },
+
+    isSpell : function(name){
+        if (typeof SpellFactory[name] == 'undefined') {
+            return false
+        }
+        return true;
+    },
 }
