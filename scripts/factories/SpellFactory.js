@@ -4,11 +4,9 @@ var SpellFactory = {
         var name = sf.normalizeName(Spell.name);
 
         if (!sf.isSpell(name)) {
-            console.log('not a spell');
             return this.default(Spell);
         }
 
-        console.log('is a spell');
         return sf[name](Spell);
     },
 
@@ -35,42 +33,51 @@ var SpellFactory = {
     },
 
     AnimateObjects: function () {
-        console.log('testing');
+        var sf = SpellFactory;
+
         Spell.modifier = 8;
         Spell.dice = '1d4+4';
-        this.multiAttack(10);
-        console.log(Spell.attacks);
-        SpellFactory.setModal(Spell.attacks, 'Tiny Object Attack');
+        sf.multiAttack(10);
+        sf.setModal(Spell.attacks, 'Tiny Object Attack', false);
 
-        // Spell.attacks = [];
-        // Spell.modifier = 6;
-        // Spell.dice = '1d8+2';
-        // this.multiAttack(10);
-        // SpellFactory.setModal(Spell.attacks, 'Small Object Attack');
+        Spell.attacks = [];
+        Spell.modifier = 6;
+        Spell.dice = '1d8+2';
+        sf.multiAttack(10);
+        sf.setModal(Spell.attacks, 'Small Object Attack', true);
 
-        // Spell.attacks = [];
-        //
-        // Spell.modifier = 5;
-        // Spell.dice = '2d6+1';
-        // this.multiAttack(5);
-        // allAttacks['medium'] = Spell.attacks;
-        // Spell.attacks = [];
-        //
-        // Spell.modifier = 6;
-        // Spell.dice = '2d10+2';
-        // this.multiAttack(2);
-        // allAttacks['large'] = Spell.attacks;
-        // Spell.attacks = [];
-        //
-        // Spell.modifier = 8;
-        // Spell.dice = '2d12+4';
-        // this.multiAttack(1);
-        // allAttacks['huge'] = Spell.attacks;
-        // Spell.attacks = allAttacks;
+        Spell.attacks = [];
+        Spell.modifier = 5;
+        Spell.dice = '2d6+1';
+        sf.multiAttack(5);
+        sf.setModal(Spell.attacks, 'Medium Object Attack', true);
+
+        Spell.attacks = [];
+        Spell.modifier = 6;
+        Spell.dice = '2d10+2';
+        sf.multiAttack(2);
+        sf.setModal(Spell.attacks, 'Large Object Attack', true);
+
+        Spell.attacks = [];
+        Spell.modifier = 8;
+        Spell.dice = '2d12+4';
+        sf.multiAttack(1);
+        sf.setModal(Spell.attacks, 'Huge Object Attack', true);
     },
 
-    setModal : function(attacks, title) {
-        ModalFactory.buildTableFromAttacks(attacks, title);
+    TolltheDead: function () {
+        sf = SpellFactory;
+        sf.attack(0);
+        SpellFactory.setModal(Spell.attacks, 'If Creature is at 100% Health');
+
+        Spell.attacks = [];
+        sf.attack(0);
+        Spell.dice = Spell.dice.replace('d8', 'd12');
+        SpellFactory.setModal(Spell.attacks, 'If Creature is Already Hurt');
+    },
+
+    setModal : function(attacks, title, collapse) {
+        ModalFactory.buildTableFromAttacks(attacks, title, collapse);
         // ModalFactory.attacksToRows(attacks);
         //ModalFactory.setAttacks(attacks);
     },
@@ -158,12 +165,9 @@ var SpellFactory = {
     isSpell : function(name){
         name = SpellFactory.normalizeName(name);
 
-        console.log('name: ' + name);
         if (typeof SpellFactory[name] == 'undefined') {
-            console.log('isSpell false');
             return false
         }
-        console.log('isSpell true');
         return true;
     },
 }

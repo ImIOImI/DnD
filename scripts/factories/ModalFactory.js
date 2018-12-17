@@ -73,7 +73,6 @@ ModalFactory = {
         $('body').on( "click", "[class$='spell__action']", function(event) {
             clickEventFactory.build(event, $('body'));
 
-            console.log(Spell);
             if((!SpellFactory.isSpell(Spell.name))&&(!Number.isInteger(parseInt(Spell.dice)))){
                 return false;
             }
@@ -115,6 +114,8 @@ ModalFactory = {
     buildTableFromAttacks : function (attacks, text, collapse) {
         var mf = ModalFactory;
         mf.setAttackTypeFromAttack(attacks[0]);
+        var headerRow = document.createElement('tr');
+        headerRow.classList.add('roller-row');
 
         var subClass = false;
         if(text.length > 0){
@@ -125,20 +126,36 @@ ModalFactory = {
             textCell.classList.add('roller-cell-text');
             textCell.colSpan = '42';
 
-            var expandId = subClass + '-expand';
-            var hideId = subClass + '-hide';
-            textCell.innerHTML = text + "<span class='roller-expand' id='"+ expandId + "' style='display: none' onclick='ModalFactory.showAll(\""+subClass+"\")'>&#9660;</span>" + "<span class='roller-hide' id='" + hideId + "' style='display: inline' onclick='ModalFactory.hideAll(\""+subClass+"\")'>&#9650;</span>";
+            var expandId = mf.getExpandId(subClass);
+            var hideId = mf.getHideId(subClass);
+
+            var expandSpan = document.createElement('span');
+            expandSpan.classList.add('roller-expand');
+            expandSpan.id = expandId;
+            expandSpan.style.display = 'none';
+            expandSpan.onclick = function(subClass){(ModalFactory.showAll(subClass))};
+            expandSpan.innerHTML = text + ' &#9660;';
+
+            var hideSpan = document.createElement('span');
+            hideSpan.classList.add('roller-hide');
+            hideSpan.id = hideId;
+            hideSpan.style.display = 'inline';
+            hideSpan.onclick = function(subClass){(ModalFactory.hideAll(subClass))};
+            hideSpan.innerHTML = text + ' &#9650;';
+
+            textCell.append(expandSpan);
+            textCell.append(hideSpan);
 
             textRow.append(textCell);
 
             mf.tblBody.append(textRow);
-        }
-
-        var headerRow = document.createElement('tr');
-
-        headerRow.classList.add('roller-row');
-        if(subClass != false){
             headerRow.classList.add(subClass);
+
+            if(collapse === true){
+                headerRow.style.display = 'none';
+                expandSpan.style.display = 'inline';
+                hideSpan.style.display = 'none';
+            }
         }
 
         switch(mf.attackType) {
@@ -209,42 +226,38 @@ ModalFactory = {
                 row.classList.add(subClass);
 
                 if(collapse === true){
-                    //row.style.visiblility = 'collapse';
+                    row.style.display = 'none';
                 }
             }
 
             mf.tblBody.appendChild(row);
         });
-
-        console.log(document.getElementById('Tiny-Object-Attack-expand'));
     },
 
-    hideAll : function(subClass){
-        console.log('hide all!');
+    hideAll : function(event){
+        subClass = event.target.id.replace('-hide', '');
         var mf = ModalFactory;
         var hideId = mf.getHideId(subClass);
         var expandId = mf.getExpandId(subClass);
 
         var list = document.querySelectorAll('.' + subClass);
-        list.forEach(function(span){
-            console.log(span);
-            span.style.display = 'none';
+        list.forEach(function(tr){
+            tr.style.display = 'none';
         })
 
         document.getElementById(hideId).style.display = 'none';
         document.getElementById(expandId).style.display = 'inline';
     },
 
-    showAll : function(subClass){
-        console.log('show all!');
+    showAll : function(event){
+        subClass = event.target.id.replace('-expand', '');
         var mf = ModalFactory;
         var hideId = mf.getHideId(subClass);
         var expandId = mf.getExpandId(subClass);
 
         var list = document.querySelectorAll('.' + subClass);
-        list.forEach(function(span){
-            console.log(span);
-            span.removeAttribute('style');
+        list.forEach(function(tr){
+            tr.removeAttribute('style');
         })
 
         document.getElementById(hideId).style.display = 'inline';
