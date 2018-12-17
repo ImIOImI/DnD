@@ -49,6 +49,12 @@
     padding: 20px;
 }
 
+.roller-row-text {
+    justify-content: space-around;
+    font-weight: bold;
+    padding: 20px;
+}
+
 .roller-head {
     padding: 20px;
     border: 1px solid #888;
@@ -60,6 +66,14 @@
     text-align: center;
     border: 1px solid #888;
     padding: 10px;
+}
+
+.roller-cell-text {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    column-span: all;
 }
 
 /* The Close Button */

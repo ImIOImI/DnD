@@ -1,12 +1,15 @@
 var SpellFactory = {
     resolveSpell: function () {
-        var name = Spell.name.replace(/\s/g, '');
+        var sf = SpellFactory;
+        var name = sf.normalizeName(Spell.name);
 
-        if (!SpellFactory.isSpell(name)) {
+        if (!sf.isSpell(name)) {
+            console.log('not a spell');
             return this.default(Spell);
         }
 
-        return SpellFactory[name](Spell);
+        console.log('is a spell');
+        return sf[name](Spell);
     },
 
     default: function () {
@@ -32,17 +35,19 @@ var SpellFactory = {
     },
 
     AnimateObjects: function () {
-        var allAttacks = [];
+        console.log('testing');
         Spell.modifier = 8;
         Spell.dice = '1d4+4';
         this.multiAttack(10);
-        allAttacks['tiny'] = Spell.attacks;
+        console.log(Spell.attacks);
+        SpellFactory.setModal(Spell.attacks, 'Tiny Object Attack');
+
         // Spell.attacks = [];
-        //
         // Spell.modifier = 6;
         // Spell.dice = '1d8+2';
         // this.multiAttack(10);
-        // allAttacks['small'] = Spell.attacks;
+        // SpellFactory.setModal(Spell.attacks, 'Small Object Attack');
+
         // Spell.attacks = [];
         //
         // Spell.modifier = 5;
@@ -65,7 +70,9 @@ var SpellFactory = {
     },
 
     setModal : function(attacks, title) {
-        ModalFactory.setAttacks(attacks);
+        ModalFactory.buildTableFromAttacks(attacks, title);
+        // ModalFactory.attacksToRows(attacks);
+        //ModalFactory.setAttacks(attacks);
     },
 
     getAdditionalAttacks: function () {
@@ -144,10 +151,19 @@ var SpellFactory = {
         }
     },
 
+    normalizeName : function(name) {
+        return Spell.name.replace(/\s/g, '');
+    },
+
     isSpell : function(name){
+        name = SpellFactory.normalizeName(name);
+
+        console.log('name: ' + name);
         if (typeof SpellFactory[name] == 'undefined') {
+            console.log('isSpell false');
             return false
         }
+        console.log('isSpell true');
         return true;
     },
 }

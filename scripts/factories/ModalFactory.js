@@ -73,6 +73,7 @@ ModalFactory = {
         $('body').on( "click", "[class$='spell__action']", function(event) {
             clickEventFactory.build(event, $('body'));
 
+            console.log(Spell);
             if((!SpellFactory.isSpell(Spell.name))&&(!Number.isInteger(parseInt(Spell.dice)))){
                 return false;
             }
@@ -80,29 +81,6 @@ ModalFactory = {
 
             mf.setSpellName(Spell.name);
             mf.setAttackTypeFromAttack(Spell.attacks[0]);
-            switch(true) {
-                // case (Spell.name === 'Animate Objects'):
-                //     break;
-                case (mf.attackType === 'save'):
-                    var saveHead = mf.makeHeader('Save');
-                    mf.tblBody.append(saveHead);
-                    break;
-                case (mf.attackType === 'hit'):
-                    var roll1Head = mf.makeHeader('First Roll');
-                    var roll2Head = mf.makeHeader('Second Roll');
-                    mf.tblBody.append(roll1Head);
-                    mf.tblBody.append(roll2Head);
-                    break;
-                default:
-                    mf.attackType = 'autohit';
-            }
-
-            var damageHead = mf.makeHeader('Damage' + ' (' + Spell.dice + ')');
-
-
-            mf.tblBody.append(damageHead);
-
-            mf.attacksToRows(Spell.attacks);
 
             mf.titleDiv.appendChild(mf.close);
             mf.modal.appendChild(mf.titleDiv);
@@ -134,28 +112,59 @@ ModalFactory = {
         mf.spellName.innerText = name;
     },
 
-    buildTableFromAttacks : function (attacks, attackName) {
-        var roll1Head = mf.makeHeader('First Roll');
-        var roll2Head = mf.makeHeader('Second Roll');
-        mf.tblBody.append(roll1Head);
-        mf.tblBody.append(roll2Head);
+    buildTableFromAttacks : function (attacks, text, collapse) {
+        var mf = ModalFactory;
+        mf.setAttackTypeFromAttack(attacks[0]);
+
+        var subClass = false;
+        if(text.length > 0){
+            subClass = text.replace(/\s/g, '-');
+            var textRow = document.createElement('tr');
+            textRow.classList.add('roller-row-text');
+            var textCell = document.createElement('td');
+            textCell.classList.add('roller-cell-text');
+            textCell.colSpan = '42';
+
+            var expandId = subClass + '-expand';
+            var hideId = subClass + '-hide';
+            textCell.innerHTML = text + "<span class='roller-expand' id='"+ expandId + "' style='display: none' onclick='ModalFactory.showAll(\""+subClass+"\")'>&#9660;</span>" + "<span class='roller-hide' id='" + hideId + "' style='display: inline' onclick='ModalFactory.hideAll(\""+subClass+"\")'>&#9650;</span>";
+
+            textRow.append(textCell);
+
+            mf.tblBody.append(textRow);
+        }
+
+        var headerRow = document.createElement('tr');
+
+        headerRow.classList.add('roller-row');
+        if(subClass != false){
+            headerRow.classList.add(subClass);
+        }
 
         switch(mf.attackType) {
             case 'save':
                 var saveHead = mf.makeHeader('Save');
-                mf.tblBody.append(saveHead);
+                headerRow.append(saveHead);
                 break;
             case 'hit':
                 var roll1Head = mf.makeHeader('First Roll');
                 var roll2Head = mf.makeHeader('Second Roll');
-                mf.tblBody.append(roll1Head);
-                mf.tblBody.append(roll2Head);
+                headerRow.append(roll1Head);
+                headerRow.append(roll2Head);
+                break;
+            default:
                 break;
         }
+
+        var damageHead = mf.makeHeader('Damage' + ' (' + Spell.dice + ')');
+        headerRow.append(damageHead);
+        mf.tblBody.append(headerRow);
+
+        mf.attacksToRows(attacks, subClass, collapse);
     },
 
 
-    attacksToRows : function (attacks) {
+    attacksToRows : function (attacks, subClass, collapse) {
         var mf = ModalFactory;
         attacks.forEach(function (attack) {
             var row = document.createElement('tr');
@@ -196,9 +205,60 @@ ModalFactory = {
             var damageCell = mf.getCell(damageText);
             row.append(damageCell);
 
+            if(subClass != false){
+                row.classList.add(subClass);
+
+                if(collapse === true){
+                    //row.style.visiblility = 'collapse';
+                }
+            }
+
             mf.tblBody.appendChild(row);
         });
+
+        console.log(document.getElementById('Tiny-Object-Attack-expand'));
     },
+
+    hideAll : function(subClass){
+        console.log('hide all!');
+        var mf = ModalFactory;
+        var hideId = mf.getHideId(subClass);
+        var expandId = mf.getExpandId(subClass);
+
+        var list = document.querySelectorAll('.' + subClass);
+        list.forEach(function(span){
+            console.log(span);
+            span.style.display = 'none';
+        })
+
+        document.getElementById(hideId).style.display = 'none';
+        document.getElementById(expandId).style.display = 'inline';
+    },
+
+    showAll : function(subClass){
+        console.log('show all!');
+        var mf = ModalFactory;
+        var hideId = mf.getHideId(subClass);
+        var expandId = mf.getExpandId(subClass);
+
+        var list = document.querySelectorAll('.' + subClass);
+        list.forEach(function(span){
+            console.log(span);
+            span.removeAttribute('style');
+        })
+
+        document.getElementById(hideId).style.display = 'inline';
+        document.getElementById(expandId).style.display = 'none';
+    },
+
+    getExpandId : function (subClass) {
+        return subClass + '-expand';
+    },
+
+    getHideId : function (subClass) {
+        return subClass + '-hide';
+    },
+
 
     makeHeader : function (text){
         var head = document.createElement('th');
