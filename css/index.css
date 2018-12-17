@@ -40,12 +40,19 @@
 .roller-modal-content {
     z-index: 1002;
     background-color: #fefefe;
-    padding: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
     width: 100%;
 }
 
 .roller-row {
     justify-content: space-around;
+    padding: 20px;
+}
+
+.roller-row-text {
+    justify-content: space-around;
+    font-weight: bold;
     padding: 20px;
 }
 
@@ -60,6 +67,14 @@
     text-align: center;
     border: 1px solid #888;
     padding: 10px;
+}
+
+.roller-cell-text {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    column-span: all;
 }
 
 /* The Close Button */
