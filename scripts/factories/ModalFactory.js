@@ -11,6 +11,7 @@ ModalFactory = {
     modal : null,
     modalBackground : null,
     spellName : null,
+    filterDiv : null,
 
     attackType : null,
 
@@ -54,6 +55,15 @@ ModalFactory = {
         mf.spellName = document.createElement('div');
         mf.spellName.classList.add('roller-spell-name');
         mf.titleDiv.appendChild(mf.spellName);
+        mf.titleDiv.appendChild(mf.close);
+
+        mf.filterDiv = document.createElement('div');
+        mf.filterDiv.classList.add('roller-wipe-content');
+        mf.modal.appendChild(mf.titleDiv);
+        mf.modal.appendChild(mf.filterDiv);
+        mf.modalContent.appendChild(mf.tbl);
+        mf.tbl.appendChild(mf.tblBody);
+        mf.modal.appendChild(mf.modalContent);
     },
 
     addCloseOnClickEvent : function () {
@@ -81,13 +91,6 @@ ModalFactory = {
             mf.setSpellName(Spell.name);
             mf.setAttackTypeFromAttack(Spell.attacks[0]);
 
-            mf.titleDiv.appendChild(mf.close);
-            mf.modal.appendChild(mf.titleDiv);
-            mf.modalContent.appendChild(mf.tbl);
-            mf.tbl.appendChild(mf.tblBody);
-            mf.modal.appendChild(mf.modalContent);
-
-            //document.getElementById('roller-close-modal').innerText =
             mf.modalBackground.style.display = "flex";
         });
     },
@@ -164,10 +167,17 @@ ModalFactory = {
                 headerRow.append(saveHead);
                 break;
             case 'hit':
-                var roll1Head = mf.makeHeader('First Roll');
-                var roll2Head = mf.makeHeader('Second Roll');
-                headerRow.append(roll1Head);
-                headerRow.append(roll2Head);
+                var defaultHead = mf.makeHeader('Roll');
+                defaultHead.classList.add('roller-default-col');
+                var advantageHead = mf.makeHeader('Advantage');
+                advantageHead.classList.add('roller-advantage-col');
+                advantageHead.style.display = 'none';
+                var disadvantageHead = mf.makeHeader('Disadvantage')
+                disadvantageHead.classList.add('roller-disadvantage-col');
+                disadvantageHead.style.display = 'none';
+                headerRow.append(defaultHead);
+                headerRow.append(advantageHead);
+                headerRow.append(disadvantageHead);
                 break;
             default:
                 break;
@@ -183,6 +193,10 @@ ModalFactory = {
 
     attacksToRows : function (attacks, subClass, collapse) {
         var mf = ModalFactory;
+        if(mf.attackType == 'hit'){
+            mf.addAdvantageFilters(subClass);
+        }
+
         attacks.forEach(function (attack) {
             var row = document.createElement('tr');
             row.classList.add('roller-roll');
@@ -193,17 +207,26 @@ ModalFactory = {
                     row.append(saveCell);
                     break;
                 case 'hit':
-                    var hit1Total = attack.roll1 + attack.hitModifier;
-                    var hit2Total = attack.roll2 + attack.hitModifier;
+                    var defaultRoll = attack.roll1 + attack.hitModifier;
+                    var advantage = attack.advantage + attack.hitModifier;
+                    var disadvantage = attack.disadvantage + attack.hitModifier;
 
-                    var hitText1 = '(' + attack.roll1 + ') + ' + attack.hitModifier + ' = ' + hit1Total;
-                    var hitText2 = '(' + attack.roll2 + ') + ' + attack.hitModifier + ' = ' + hit2Total;
+                    var defaultText = '(' + attack.roll1 + ') + ' + attack.hitModifier + ' = ' + defaultRoll;
+                    var advantageText = '(' + attack.advantage + ') + ' + attack.hitModifier + ' = ' + advantage;
+                    var disadvantageText = '(' + attack.disadvantage + ') + ' + attack.hitModifier + ' = ' + disadvantage;
 
-                    var roll1Cell = mf.getCell(hitText1);
-                    var roll2Cell = mf.getCell(hitText2);
+                    var rollCell = mf.getCell(defaultText);
+                    rollCell.classList.add('roller-default-col');
+                    var advantageCell = mf.getCell(advantageText);
+                    advantageCell.classList.add('roller-advantage-col');
+                    advantageCell.style.display = 'none';
+                    var disadvantageCell = mf.getCell(disadvantageText);
+                    disadvantageCell.classList.add('roller-disadvantage-col');
+                    disadvantageCell.style.display = 'none';
 
-                    row.append(roll1Cell);
-                    row.append(roll2Cell);
+                    row.append(rollCell);
+                    row.append(advantageCell);
+                    row.append(disadvantageCell);
                     break;
                 default:
                 //don't do anything for auto hits
@@ -232,6 +255,119 @@ ModalFactory = {
 
             mf.tblBody.appendChild(row);
         });
+    },
+
+    addAdvantageFilters : function() {
+        var mf = ModalFactory;
+
+        var defaultInput = document.createElement("input");
+        var advantageInput = document.createElement("input");
+        var disadvantageInput = document.createElement("input");
+
+        var defaultLabel = document.createElement("label");
+        var advantageLabel = document.createElement("label");
+        var disadvantageLabel = document.createElement("label");
+
+        defaultInput.checked = true;
+
+        defaultInput.type = 'radio';
+        advantageInput.type = 'radio';
+        disadvantageInput.type = 'radio';
+
+        defaultInput.name = name;
+        advantageInput.name = name;
+        disadvantageInput.name = name;
+
+        defaultInput.value = 'default';
+        advantageInput.value = 'advantage';
+        disadvantageInput.value = 'disadvantage';
+
+        defaultLabel.innerText = 'Default';
+        advantageLabel.innerText = 'Advantage';
+        disadvantageLabel.innerText = 'Disadvantage';
+
+        defaultInput.id = 'Roller-Default-Radio';
+        advantageInput.id = 'Roller-Advantage-Radio';
+        disadvantageInput.id = 'Roller-Disadvantage-Radio';
+
+        defaultLabel.classList.add('roller-radio-label', 'roller-radio-label-selected');
+        advantageLabel.classList.add('roller-radio-label');
+        disadvantageLabel.classList.add('roller-radio-label');
+
+        defaultLabel.id = 'roller-default-radio-label';
+        advantageLabel.id = 'roller-advantage-radio-label';
+        disadvantageLabel.id = 'roller-disadvantage-radio-label';
+
+
+        defaultInput.onclick = function(event) {ModalFactory.advantageSwitch(event);};
+        advantageInput.onclick = function(event) {ModalFactory.advantageSwitch(event);};
+        disadvantageInput.onclick = function(event) {ModalFactory.advantageSwitch(event);};
+
+
+        defaultLabel.append(defaultInput);
+        advantageLabel.append(advantageInput);
+        disadvantageLabel.append(disadvantageInput);
+
+        mf.filterDiv.append(defaultLabel);
+        mf.filterDiv.append(advantageLabel);
+        mf.filterDiv.append(disadvantageLabel);
+    },
+
+    advantageSwitch : function(event) {
+        var id = event.target.id;
+        var subClass = event.target.getAttribute('subclass');
+        var value = event.target.value;
+
+        var defC = '.roller-default-col';
+        var addC = '.roller-advantage-col';
+        var disC = '.roller-disadvantage-col';
+
+        var addList = document.querySelectorAll(addC);
+        var disList = document.querySelectorAll(disC);
+        var defList = document.querySelectorAll(defC);
+
+        var offList1 = false;
+        var offList2 = false;
+        var onList = false;
+
+        var defLabel = document.getElementById('roller-default-radio-label');
+        var advLabel = document.getElementById('roller-advantage-radio-label');
+        var disLabel = document.getElementById('roller-disadvantage-radio-label');
+
+        defLabel.classList.remove('roller-radio-label-selected');
+        advLabel.classList.remove('roller-radio-label-selected')
+        disLabel.classList.remove('roller-radio-label-selected');
+
+        switch (value){
+            case 'default':
+                offList1 = addList;
+                offList2 = disList;
+                onList = defList;
+                defLabel.classList.add('roller-radio-label-selected');
+                break;
+            case 'advantage':
+                offList1 = defList;
+                offList2 = disList;
+                onList = addList;
+                advLabel.classList.add('roller-radio-label-selected');
+                break;
+            case 'disadvantage':
+                offList1 = addList;
+                offList2 = defList;
+                onList = disList;
+                disLabel.classList.add('roller-radio-label-selected');
+                break;
+        }
+
+        offList1.forEach(function(col){
+            col.style.display = 'none';
+        })
+        offList2.forEach(function(col){
+            col.style.display = 'none';
+        })
+        onList.forEach(function(col){
+            col.removeAttribute('style');
+        })
     },
 
     hideAll : function(event){
