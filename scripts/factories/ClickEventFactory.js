@@ -5,19 +5,23 @@ clickEventFactory = {
     isSpell: null,
     spell: null,
 
-    build: function (event, doc) {
+    build: function (event) {
+        //console.log(event);
         this.event = event;
         this.target = event.target;
-        row = this.findRow(doc);
+        row = this.findRow(event);
+        console.log(row);
         spell = this.buildSpell(row);
 
         return spell;
     },
 
-    findRow: function (doc) {
+    findRow: function (event) {
         //we need to figure out if we just clicked on the span or the button
-        tagName = this.event.target.tagName;
-        return $(this.event.target).closest(".ct-spells-spell");
+        tagName = clickEventFactory.event.target.tagName;
+        console.log(event);
+        console.log(event.target.closest(".ct-spells-spell"));
+        return event.target.closest(".ct-spells-spell");
     },
 
     buildSpell: function (row) {
@@ -28,25 +32,27 @@ clickEventFactory = {
         var notes;
 
         self = this;
-        row.find('div').each(function () {
+        console.log(row.querySelectorAll('div'));
+
+        row.querySelectorAll('div').forEach(function (div) {
             text = null;
-            switch (this.className.trim()) {
+            switch (div.className.trim()) {
                 case 'ct-spells-spell__label':
                 case 'ct-spells-spell__label ct-spells-spell__label--scaled':
-                case self.regTest('__label', this.className):
-                    name = this.innerText;
+                case self.regTest('__label', div.className):
+                    name = div.innerText;
                     break;
                 case 'ct-spells-spell__attacking':
-                    modifier = this.innerText.replace(/[\n\r]+/g, '');
+                    modifier = div.innerText.replace(/[\n\r]+/g, '');
                     break;
                 case 'ct-spells-spell__save':
-                    save = this.innerText;
+                    save = div.innerText;
                     break;
                 case 'ct-spells-spell__damage':
-                    dice = this.innerText.replace(/[\n\r]+/g, '').replace(/\*+/g, '');
+                    dice = div.innerText.replace(/[\n\r]+/g, '').replace(/\*+/g, '');
                     break;
                 case 'ct-spells-spell__notes':
-                    notes = this.innerText.replace(/[\n\r]+/g, '').replace(/\*+/g, '');
+                    notes = div.innerText.replace(/[\n\r]+/g, '').replace(/\*+/g, '');
                     break;
                 default:
             }

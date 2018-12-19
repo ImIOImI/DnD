@@ -19,7 +19,6 @@
         "http://*.dndbeyond.com/profile/*/characters/*"
       ],
       "js": [
-        "scripts/lib/jquery.min.js",
         "scripts/lib/arrive.min.js",
         "scripts/entities/Attack.js",
         "scripts/factories/ModalFactory.js",

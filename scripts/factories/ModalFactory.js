@@ -2,6 +2,7 @@ var ModalFactory;
 ModalFactory = {
     attacks : [],
 
+
     //modal content elements
     close : null,
     titleDiv : null,
@@ -17,8 +18,13 @@ ModalFactory = {
 
     initModal : function () {
         var mf = ModalFactory;
+        if(mf.initialized == true){
+            return false;
+        }
+
         mf.buildContainer();
         mf.addSpellClickEvent();
+        mf.initialized = true;
     },
 
     buildContainer : function () {
@@ -80,18 +86,21 @@ ModalFactory = {
     addSpellClickEvent : function () {
         var mf = ModalFactory;
         //need to set a listener for when the Spell class div appears <div class="ct-spells">
-        $('body').on( "click", "[class$='spell__action']", function(event) {
-            clickEventFactory.build(event, $('body'));
+        var actions = document.querySelectorAll(".ct-spells-spell__action");
+        actions.forEach(function(action){
+            action.addEventListener('click', function (event) {
+                clickEventFactory.build(event);
 
-            if((!SpellFactory.isSpell(Spell.name))&&(!Number.isInteger(parseInt(Spell.dice)))){
-                return false;
-            }
-            SpellFactory.resolveSpell(Spell);
+                if((!SpellFactory.isSpell(Spell.name))&&(!Number.isInteger(parseInt(Spell.dice)))){
+                    return false;
+                }
+                SpellFactory.resolveSpell(Spell);
 
-            mf.setSpellName(Spell.name);
-            mf.setAttackTypeFromAttack(Spell.attacks[0]);
+                mf.setSpellName(Spell.name);
+                mf.setAttackTypeFromAttack(Spell.attacks[0]);
 
-            mf.modalBackground.style.display = "flex";
+                mf.modalBackground.style.display = "flex";
+            })
         });
     },
 

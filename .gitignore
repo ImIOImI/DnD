@@ -1,5 +1,4 @@
 .idea/*
 *.min.js
-!/scripts/lib/jquery.min.js
 !/scripts/lib/arrive.min.js
 !/scripts/lib/*
