@@ -64,7 +64,7 @@ ModalFactory = {
         mf.titleDiv.appendChild(mf.close);
 
         mf.filterDiv = document.createElement('div');
-        mf.filterDiv.classList.add('roller-wipe-content');
+        mf.filterDiv.classList.add('roller-wipe-content', 'roller-filter-bar');
         mf.modal.appendChild(mf.titleDiv);
         mf.modal.appendChild(mf.filterDiv);
         mf.modalContent.appendChild(mf.tbl);
@@ -149,7 +149,7 @@ ModalFactory = {
             expandSpan.innerHTML = text + ' &#9660;';
 
             var hideSpan = document.createElement('span');
-            hideSpan.classList.add('roller-hide');
+            hideSpan.classList.add('roller-hide', 'roller-subtitle');
             hideSpan.id = hideId;
             hideSpan.style.display = 'inline';
             hideSpan.onclick = function(subClass){(ModalFactory.hideAll(subClass))};
@@ -268,6 +268,9 @@ ModalFactory = {
 
     addAdvantageFilters : function() {
         var mf = ModalFactory;
+        if(mf.filterDiv.innerHTML.length > 0){
+            return false;
+        }
 
         var defaultInput = document.createElement("input");
         var advantageInput = document.createElement("input");
@@ -276,6 +279,18 @@ ModalFactory = {
         var defaultLabel = document.createElement("label");
         var advantageLabel = document.createElement("label");
         var disadvantageLabel = document.createElement("label");
+
+        var defaultLabelWrapper = document.createElement('div');
+        var advantageLabelWrapper = document.createElement('div');
+        var disadvantageLabelWrapper = document.createElement('div');
+
+        defaultLabelWrapper.classList.add('roller-filter-wrapper');
+        advantageLabelWrapper.classList.add('roller-filter-wrapper');
+        disadvantageLabelWrapper.classList.add('roller-filter-wrapper');
+
+        defaultLabelWrapper.append(defaultLabel);
+        advantageLabelWrapper.append(advantageLabel);
+        disadvantageLabelWrapper.append(disadvantageLabel);
 
         defaultInput.checked = true;
 
@@ -317,9 +332,9 @@ ModalFactory = {
         advantageLabel.append(advantageInput);
         disadvantageLabel.append(disadvantageInput);
 
-        mf.filterDiv.append(defaultLabel);
-        mf.filterDiv.append(advantageLabel);
-        mf.filterDiv.append(disadvantageLabel);
+        mf.filterDiv.append(defaultLabelWrapper);
+        mf.filterDiv.append(advantageLabelWrapper);
+        mf.filterDiv.append(disadvantageLabelWrapper);
     },
 
     advantageSwitch : function(event) {
