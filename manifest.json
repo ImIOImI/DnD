@@ -1,7 +1,7 @@
 {
   "name": "DnD Dice Roller",
   "description": "Calculates the hit and damage of any spell or attack action",
-  "version": "1.07",
+  "version": "1.08",
   "manifest_version": 2,
   "permissions": [
     "activeTab"
